@@ -48,7 +48,10 @@ pipeline {
             steps {
                 script {           
                    unstash name: "quiz_jar"
-                   sh "ls"
+                   sh """
+                        cd target
+                        ls
+                   """
                 }
             }
         }
