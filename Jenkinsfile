@@ -46,12 +46,20 @@ pipeline {
 
         stage('Deploy') {
             steps {
-                script {           
-                   unstash name: "quiz_jar"
-                   sh """
-                        cd target
-                        ls
-                   """
+                script {
+                    def cfOrg = "aa15ac2atrial"
+                    def cfApiEndpoint = "https://api.cf.eu10.hana.ondemand.com"
+                    unstash name: "quiz_jar"
+                    withCredentials([usernamePassword(
+                        credentialsId: "cf-trial", 
+                        passwordVariable: 'CF_PASS', 
+                        usernameVariable: 'CF_USER')]) {
+                            sh """
+                                cf --version
+                                cf login -a ${cfApiEndpoint} -o ${cfOrg} -u ${CF_USER} -p ${CF_PASS}
+                                cf push quiz_app -p target/QuizZz-0.0.1-QuizApp.jar
+                            """
+                        }
                 }
             }
         }
