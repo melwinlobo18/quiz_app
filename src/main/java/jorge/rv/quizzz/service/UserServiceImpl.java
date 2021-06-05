@@ -39,7 +39,7 @@ public class UserServiceImpl implements UserService {
 		}
 
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
-		user.setEnabled(false);
+		user.setEnabled(true);
 
 		return userRepository.save(user);
 	}
