@@ -19,6 +19,10 @@ pipeline {
             steps {
                 script {           
                     def buildImage = docker.build("quizzz", "-f Dockerfile .")
+                    buildImage.inside() {
+                        sh "mvn install"
+                    }
+                    stash name: 'quiz_jar', includes: "target/QuizZz-0.0.1-QuizApp.jar"
                 }
             }
         }
@@ -36,6 +40,15 @@ pipeline {
                                 docker push ${DOCKER_USERNAME}/quizzz
                             """
                         }
+                }
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                script {           
+                   unstash name: "quiz_jar"
+                   sh "ls"
                 }
             }
         }
