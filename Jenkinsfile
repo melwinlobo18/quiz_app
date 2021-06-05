@@ -10,6 +10,7 @@ pipeline {
                     unitTestImage.inside() {
                         sh "mvn test"
                     }
+                    junit allowEmptyResults: true, testResults: "target/surefire-reports/*.xml"
                     archiveArtifacts artifacts: "target/surefire-reports/*.xml", fingerprint: true, allowEmptyArchive: true
                 }
             }
